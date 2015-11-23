@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="${request.locale_name}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="pyramid web application">
+    <meta name="author" content="Pylons Project">
+    <link rel="shortcut icon" href="${request.static_url('title_asins:static/pyramid-16x16.png')}">
+
+    <title>ATI title extractor</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="//oss.maxcdn.com/libs/twitter-bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this scaffold -->
+    <link href="${request.static_url('title_asins:static/theme.css')}" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="//oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <h2>Check ATI tranlation</h2>
+
+    <p>Enter ASINs</p>
+
+    <div tal:condition="asin">
+      <ul>
+        <div tal:repeat="lunch lunches" tal:omit-tag="">
+          <li tal:content="string:${lunch.submitter} just ate ${lunch.food}"/>
+        </div>
+      </ul>
+    </div>
+    <div tal:condition="not:lunches">
+      <em>Nothing found.</em>
+    </div>
+
+    <h3>What asin</h3>
+
+    <form method="POST" action="/newlunch">
+      Enter Asins (one term in one line), then press button below to submitt.
+      <br/>
+      ${form.textarea("asin", cols="50", rows="10")}
+      <br/>
+      <input type="submit" value="Gimme them titles" />
+    </form>
+  </body>
+</html>
