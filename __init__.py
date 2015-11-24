@@ -36,7 +36,7 @@ def main(global_config, **settings):
     config.add_request_method(add_db, 'db', reify=True)
     config.add_request_method(add_fs, 'fs', reify=True)
     config.add_route('home', '/')
-    config.add_route('asin', '/asin')
+    config.add_route('result', '/result')
     config.add_route('find', '/{asin}/{src_site}/{dst_site}')
     config.scan()
     return config.make_wsgi_app()

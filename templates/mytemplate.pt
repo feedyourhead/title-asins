@@ -25,22 +25,19 @@
   <body>
     <h2>Check ATI tranlation</h2>
 
-    <p>Enter ASINs</p>
+    <p>Enter ASIN</p>
 
-    <div tal:condition="asin">
-      <ul>
-        <div tal:repeat="lunch lunches" tal:omit-tag="">
-          <li tal:content="string:${lunch.submitter} just ate ${lunch.food}"/>
-        </div>
-      </ul>
-    </div>
-    <div tal:condition="not:lunches">
-      <em>Nothing found.</em>
-    </div>
 
-    <h3>What asin</h3>
 
-    <form method="POST" action="/newlunch">
+    <form method="GET" action="/result">
+      Enter source site: 
+      <br>
+      ${form.text("src_site", size=20)}
+      <br>
+      Enter destination site:
+      <br>
+      ${form.text("dst_site", size=20)}
+      <br>
       Enter Asins (one term in one line), then press button below to submitt.
       <br/>
       ${form.textarea("asin", cols="50", rows="10")}
