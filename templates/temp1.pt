@@ -4,6 +4,15 @@
     <title>Quick Tutorial</title>
 </head>
 <body>
-<h1>Hi ${asin}</h1>
+Go back <a href="/">home</a>
+<h1>ASIN: ${asin}</h1>
+<br>
+  Source site: ${src_site} <br>
+  Destination site: ${dst_site} <br>
+  Translation: ${translation}
+  <br>
+DATA:
+<br>
+ ${query} 
 </body>
 </html>

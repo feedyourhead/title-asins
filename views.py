@@ -40,3 +40,26 @@ def asin(request):
 # def dashboard(request):
 #     vendors = request.db['vendors'].find()
 #     return {'vendors':vendors}
+
+@view_config(route_name='find',
+             renderer='templates/temp1.pt',
+             #request_method='POST'
+             )
+def find(request):
+    asin = request.matchdict['asin']
+    src_site = request.matchdict['src_site']
+    dst_site = request.matchdict['dst_site']
+    
+    query = request.db['item_translations'].find_one(
+            {
+                'src_asin': unicode(asin),
+                'src_site': unicode(src_site),
+                'dst_site': unicode(dst_site)
+            })
+    return {'asin':query['src_asin'], 
+            'src_site':query['src_site'], 
+            'dst_site':query['dst_site'],
+            'translation':query['attributes.Title.translation'],
+            'query':query
+            }
+
