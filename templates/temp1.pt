@@ -23,16 +23,26 @@
     <![endif]-->
   </head>
 
+
+
 <body>
 <b><a href="/">Go back home</a></b>
-<h1>ASIN: ${asin}</h1>
 <br>
   Source site: ${src_site} <br>
   Destination site: ${dst_site} <br>
-  Translation: ${translation}
-  <br>
-DATA:
-<br>
- ${query} 
+
+<div tal:condition="results">
+  <ol>
+    <div tal:repeat="result results" tal:omit-tag="">
+      <li tal:content="string: ASIN: ${result.src_asin} <br> 
+        Translation: ${result.translation} <br>
+        Original: ${result.original}"/>
+    </div>
+  </ol>
+</div>
+<div tal:condition="not:results">
+  <em>Nobody has eaten lunch, you must all be starving!</em>
+</div>
 </body>
 </html>
+

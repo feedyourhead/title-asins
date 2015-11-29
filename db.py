@@ -1,29 +1,35 @@
-def mongosession():
-    from pylons import config
-    return config['pylons.app_globals'].db
+#from pyramid.config import Configurator
+# from urlparse import urlparse
+# from gridfs import GridFS
+import pymongo
 
 
-class Globals(object):
-    """Globals acts as a container for objects available throughout the
-    life of the application
-    """
-    
-    def __init__(self, config):
-        from mongokit import Connection
-        
-        self.connection = Connection(
-            host=config['mongodb.url'],
-            replicaset=config.get('mongodb.replica_set_name', '')
+class MongoConnection(object):
+
+    # @classmethod
+    # def dbsession(cls, **settings):
+    #     #config = Configurator(settings=settings)
+    #     db_url = urlparse(settings['mongo_uri'])
+    #     db = pymongo.MongoClient(
+    #        host=db_url.hostname,
+    #        port=db_url.port,
+    #     )
+       
+    #     if db_url.username and db_url.password:
+    #        db.authenticate(db_url.username, db_url.password)
+
+    #     return db
+
+
+    @classmethod
+    def dbsession(cls):
+       
+        db = pymongo.MongoClient('mongodb://dwykretowicz:PASSWORD@wi-amazon-mongo-2.db.devwebinterpret.com:27017/wi-amazon'
         )
-
-        self.db = self.connection[config['mongodb.dbname']]
-        if config['mongodb.username']:
-            # For the sake of dev environment managed by puppet it's much
-            # easier to allow connecting to the mongodb with disabled
-            # authentication. This can be accomplished by leaving
-            # empty credentials in the config file.
-            self.db.authenticate(
-                config['mongodb.username'], config['mongodb.password'])
+        return db['wi-amazon']
 
 
-        self.connection.register(register_models)
+
+mongosession = MongoConnection.dbsession()
+
+# print mongosession['item_translations'].find_one()

@@ -40,7 +40,7 @@
       <br>
       Enter Asins (one term in one line), then press button below to submitt.
       <br/>
-      ${form.textarea("asin", cols="50", rows="10")}
+      ${form.textarea("src_asin", cols="50", rows="10")}
       <br/>
       <input type="submit" value="Gimme them titles" />
     </form>
