@@ -24,7 +24,7 @@ class MongoConnection(object):
     @classmethod
     def dbsession(cls):
        
-        db = pymongo.MongoClient('mongodb://dwykretowicz:PASSWORD@wi-amazon-mongo-2.db.devwebinterpret.com:27017/wi-amazon'
+        db = pymongo.MongoClient('mongodb://dwykretowicz:PASS@wi-amazon-mongo-2.db.devwebinterpret.com:27017/wi-amazon'
         )
         return db['wi-amazon']
 

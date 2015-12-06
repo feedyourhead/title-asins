@@ -32,16 +32,17 @@
   Destination site: ${dst_site} <br>
 
 <div tal:condition="results">
-  <ol>
+  <ul>
     <div tal:repeat="result results" tal:omit-tag="">
-      <li tal:content="string: ASIN: ${result.src_asin} <br> 
-        Translation: ${result.translation} <br>
-        Original: ${result.original}"/>
+      <li tal:content="string: ASIN: ${result.src_asin}"/>
+      <li tal:content="string: Translation: ${result.translation}"/>
+      <li tal:content="string: Original: ${result.original}"/>
+      <br> 
     </div>
-  </ol>
+  </ul>
 </div>
 <div tal:condition="not:results">
-  <em>Nobody has eaten lunch, you must all be starving!</em>
+  <em>Nothing to show here</em>
 </div>
 </body>
 </html>

@@ -32,11 +32,11 @@
     <form method="GET" action="/result">
       Enter source site: 
       <br>
-      ${form.text("src_site", size=20)}
+      ${form.select("src_site", ["UK", "DE", "FR", "IT", "ES"])}
       <br>
       Enter destination site:
       <br>
-      ${form.text("dst_site", size=20)}
+      ${form.select("dst_site", ["DE", "UK", "FR", "IT", "ES"])}
       <br>
       Enter Asins (one term in one line), then press button below to submitt.
       <br/>
