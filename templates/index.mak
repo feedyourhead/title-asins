@@ -3,33 +3,64 @@
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="${request.static_url('title_asins:static/base.css')}">
-    <title>wi-tqa app</title>
+    <title>ASIN data extractor</title>
 </head>
-  <body>
+<body>
+  <div id="header">
+    <h1>ASIN Translation checker</h1>
+  </div>
+  <div id="page">
+    <div id="maincontent" >
+      <%block name="results">
 
-    <div id="header">
-<h1></h1>
-</div>
-     <div id="nav">
-     <h3>Amazon item translations finder</h3>
-     <form method="POST" action="result_mako">
+      <table>
+      <tbody>
+        <tr>
+          <th>ASIN</th>
+          <th>Original 
+            % if src_site: 
+            - ${src_site}
+            %endif
+          </th>
+          <th>Translation
+            % if dst_site: 
+            - ${dst_site}
+            %endif
+          </th>    
+        </tr>
+
+        % for result in qresults:
+          <tr>
+            <td>${result['src_asin']}</td>
+            <td>${result['original']}</td>
+            <td>${result['translation']}</td>    
+          </tr>
+        % endfor
+      </tbody>
+      </table>
+
+      </%block>
+    </div>
+
+  <div id="nav">
+    <h3></h3>
+     <form method="POST" action="/">
       Enter source market:
       <br>
-      ${form.select("src_site", ["UK", "DE", "FR", "IT", "ES"])}
+      ${form.select("src_site", amazon_sites)}
       <br>
       Enter destination market:
       <br>
-      ${form.select("dst_site", ["DE", "UK", "FR", "IT", "ES"])}
+      ${form.select("dst_site", amazon_sites)}
       <br>
-      Enter Asins (one term in one line), then press button below to submit.
+      Enter Asins 
       <br/>
-      ${form.textarea("src_asin", cols="20", rows="30")}
+      ${form.textarea("src_asin", cols="35", rows="20")}
       <br/>
-      <input type="submit" value="Get translations" />
-     </div>
-     <div id="section" class="section">
-     <%block name="section">
-     </%block>
-     </div>
-  </body>
+      <input type="submit" value="Gimme translations" />
+      <br>
+  </div>
+  <div id="clearingdiv"></div>
+</div>
+</body>
 </html>

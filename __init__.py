@@ -13,9 +13,9 @@ def main(global_config, **settings):
     # config.registry.db = mongosession
     # config.add_request_method(mongosession, 'db', reify=True)
     config.add_route('home', '/')
-    config.add_route('result', '/result')
-    config.add_route('home_mako', '/home')
-    config.add_route('result_mako', '/result_mako' )
-    config.add_route('find', '/{asin}/{src_site}/{dst_site}')
+    # config.add_route('result', '/result')
+    # config.add_route('home_mako', '/home')
+    # config.add_route('result_mako', '/result_mako' )
+    # config.add_route('find', '/{asin}/{src_site}/{dst_site}')
     config.scan()
     return config.make_wsgi_app()

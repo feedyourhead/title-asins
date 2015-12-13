@@ -1,22 +1,25 @@
 # -*- coding: utf-8 -*-
 
-AMAZON_SITES = ('UK', 'FR', 'DE', 'IT', 'ES')   
+class AsinController(object):
 
-class AsinPreparator(object):
+    ASIN_LIST_LIMIT = 10
+    
+    def __init__(self, asins):
+        self.asins = asins
 
-    @staticmethod
-    def get_list_of_asins(asins):
-        asin_list = asins.splitlines()
-        return asin_list
+    def _get_asins_from_request(self):
+        asin_list = []
+        for line in self.asins.splitlines():
+            for asin in line.split(','):
+                try:
+                    asin_list.append(str(asin.strip()))
+                except ValueError:
+                    pass
+        return list(set(asin_list))
 
-    @staticmethod
-    def validate_list_lenght(asin_list, max_lenght=10):
-        if len(asin_list) > max_lenght:
-            return asin_list[:max_lenght] #check in bulk requster
+    def validate_asin_list_length(self):
+        asin_list = self._get_asins_from_request()
+        if len(asin_list) > self.ASIN_LIST_LIMIT:
+            return asin_list[:self.ASIN_LIST_LIMIT] #check in bulk requster
         else:
             return asin_list
-
-    def main(self, asins):
-        return self.validate_list_lenght(
-                self.get_list_of_asins(asins)
-                )
