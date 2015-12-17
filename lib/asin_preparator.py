@@ -17,7 +17,7 @@ class AsinController(object):
                     pass
         return list(set(asin_list))
 
-    def validate_asin_list_length(self):
+    def validate_asin_list(self):
         asin_list = self._get_asins_from_request()
         if len(asin_list) > self.ASIN_LIST_LIMIT:
             return asin_list[:self.ASIN_LIST_LIMIT] #check in bulk requster

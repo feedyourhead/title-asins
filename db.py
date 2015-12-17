@@ -23,12 +23,14 @@ class MongoConnection(object):
 
     @classmethod
     def dbsession(cls):
-       
-        db = pymongo.MongoClient('mongodb://dwykretowicz:PASS@wi-amazon-mongo-2.db.devwebinterpret.com:27017/wi-amazon'
-        )
+        try:
+            db = pymongo.MongoClient('mongodb://dwykretowicz:PASS@wi-amazon-mongo-2.db.devwebinterpret.com:27017/wi-amazon'
+                )
+            print 'connected!'
+        # except pymongo.errors.ConnectionFailure, e:
+        except Exception as e:
+            print "exception: ", type(e), e
         return db['wi-amazon']
-
-
 
 mongosession = MongoConnection.dbsession()
 
