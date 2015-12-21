@@ -34,20 +34,20 @@ th {
 }
 
 #page {
-    margin-left: 315px;
+    margin-left: 310px;
 }
 #maincontent {
     float: right;
     width: 100%;
 
-    padding:5px;
+
 
 }
 #clearingdiv {
     clear: both;
 }
 #header {
-    background-color:lightgrey;
+    background-color:#514949;
     color:white;
     text-align:center;
     padding:5px;
@@ -58,7 +58,7 @@ th {
     width:300px;
     float:left;
     padding: 5px;
-    margin-left: -315px;
+    margin-left: -310px;
 }
 #footer {
     background-color:black;
@@ -66,4 +66,16 @@ th {
     clear:both;
     text-align:center;
     padding:5px; 
+}
+#flash, #notfound {
+  float: right;
+  font-size: 16px;
+  color:white;
+  font-weight: 900;
+  width: 100%;
+  text-align: center;
+  background-color: #ffb84c;
+  border-top: 2px solid #fb9c0c;
+  border-bottom: 2px solid #fb9c0c;
+  padding: 10px 20px 10px 20px;
 }
