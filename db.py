@@ -1,36 +1,17 @@
-#from pyramid.config import Configurator
-# from urlparse import urlparse
-# from gridfs import GridFS
-import pymongo
+# import pymongo
+from pymongo import MongoClient
 
 
-class MongoConnection(object):
+class MongoSessionFactory(object):
 
-    # @classmethod
-    # def dbsession(cls, **settings):
-    #     #config = Configurator(settings=settings)
-    #     db_url = urlparse(settings['mongo_uri'])
-    #     db = pymongo.MongoClient(
-    #        host=db_url.hostname,
-    #        port=db_url.port,
-    #     )
-       
-    #     if db_url.username and db_url.password:
-    #        db.authenticate(db_url.username, db_url.password)
+    def __init__(self, mongo_uri):
+        self.mongo_uri = mongo_uri
 
-    #     return db
-
-
-    @classmethod
-    def dbsession(cls):
+    def create_session_callable(self):
         try:
-            db = pymongo.MongoClient('mongodb_uri')
+            session = MongoClient(self.mongo_uri)
             print 'connected!'
-        # except pymongo.errors.ConnectionFailure, e:
         except Exception as e:
             print "exception: ", type(e), e
-        return db['wi-amazon']
+        return session['wi-amazon']
 
-mongosession = MongoConnection.dbsession()
-
-# print mongosession['item_translations'].find_one()
