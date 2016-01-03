@@ -13,27 +13,28 @@ class AsinFormSchema(Schema):
     dst_site = validators.UnicodeString()
 
 
-class AsinViews:
+class AsinViews(object):
 
     AMAZON_SITES = ('UK', 'DE', 'FR', 'IT', 'ES')
 
     def __init__(self, request):
         self.request = request
+        self.form = Form(self.request, schema=AsinFormSchema())
 
     @view_config(route_name='home',
                  renderer='templates/index.mak'
                  )
     def find(self):
-        form = Form(self.request, schema=AsinFormSchema())
-        src_site = self.request.params.get('src_site')
-        dst_site = self.request.params.get('dst_site')
-        asins = self.request.params.get('src_asin')
-        if not form.validate:
-            raise exc.HTTPBadRequest
-        if src_site != None and src_site == dst_site:
-            self.request.session.flash(
-                "Destination site has to be differnet than source site.")
-            raise exc.HTTPSeeOther('/')
+        if self.request.POST:
+            src_site = self.request.params.get('src_site')
+            dst_site = self.request.params.get('dst_site')
+            asins = self.request.params.get('src_asin')
+            if not self.form.validate:
+                raise exc.HTTPBadRequest
+            if src_site != None and src_site == dst_site:
+                self.request.session.flash(
+                    "Destination site has to be differnet than source site.")
+                raise exc.HTTPSeeOther('/')
         asin_list = []
         if asins:
             asins = AsinController(asins)
