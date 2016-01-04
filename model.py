@@ -45,3 +45,27 @@ class ItemTranslationFinder(BaseFinder):
                 'src_site': unicode(src_site),
                 'dst_site': unicode(dst_site)
             })
+
+    def find_by_asin_list_and_sites(self, asin_list, src_site, dst_site):
+        results = []
+        for asin in asin_list:
+            try:
+                item_trans = self.find_one_by_asin_and_sites(
+                    asin,
+                    src_site,
+                    dst_site
+                )
+                item_trans = {
+                    'src_asin': item_trans['src_asin'],
+                    'translation':
+                        item_trans['attributes']['Title']['translation'],
+                    'original': item_trans['attributes']['Title']['original']
+                }
+                results.append(item_trans)
+            except:
+                results.append(
+                    {'src_asin': asin,
+                     'translation': 'not found',
+                     'original': 'not found'
+                     })
+        return results

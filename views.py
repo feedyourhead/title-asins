@@ -26,47 +26,26 @@ class AsinViews(object):
                  )
     def find(self):
         if self.request.POST:
-            src_site = self.request.params.get('src_site')
-            dst_site = self.request.params.get('dst_site')
-            asins = self.request.params.get('src_asin')
-            if not self.form.validate:
+            if not self.form.validate():
                 raise exc.HTTPBadRequest
-            if src_site != None and src_site == dst_site:
+            data = self.form.data
+            if data['src_site'] == data['dst_site']:
                 self.request.session.flash(
                     "Destination site has to be differnet than source site.")
                 raise exc.HTTPSeeOther('/')
-        asin_list = []
-        if asins:
-            asins = AsinController(asins)
+            asins = AsinController(data['src_asin'])
             asin_list = asins.get_asins_from_request()
             if not asins.validate_list_length():
                 self.request.session.flash(
-                    "Please do not enter more than  %s ASINs at a time" % asins.ASIN_LIST_LIMIT)
+                    "Please do not enter more than  %s ASINs at a time"
+                    % asins.ASIN_LIST_LIMIT)
                 raise exc.HTTPSeeOther('/')
-        results = []
-        for asin in asin_list:
-            try:
-                item_trans = self.request.db.find_one_by_asin_and_sites(
-                    asin,
-                    src_site,
-                    dst_site
-                )
-                item_trans = {
-                    'src_asin': item_trans['src_asin'],
-                    'translation': item_trans['attributes']['Title']['translation'],
-                    'original': item_trans['attributes']['Title']['original']
-                }
-                results.append(item_trans)
-            except:
-                results.append(
-                    {'src_asin': asin,
-                     'translation': 'not found',
-                     'original': 'not found'
-                     })
+        results = self.request.db.find_by_asin_list_and_sites(
+            asin_list, data['src_site'], data['dst_site'])
 
-        return {'form': FormRenderer(form),
+        return {'form': FormRenderer(self.form),
                 'qresults': results,
                 'amazon_sites': self.AMAZON_SITES,
-                'src_site': src_site,
-                'dst_site': dst_site
+                'src_site': data['src_site'],
+                'dst_site': data['dst_site']
                 }
