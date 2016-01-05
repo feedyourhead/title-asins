@@ -10,8 +10,7 @@ class MongoSessionFactory(object):
     def create_session_callable(self):
         try:
             session = MongoClient(self.mongo_uri)
-            print 'connected!'
+            # add actually a connection status
         except Exception as e:
             print "exception: ", type(e), e
         return session['wi-amazon']
-

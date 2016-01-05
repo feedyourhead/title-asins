@@ -1,7 +1,7 @@
 from pyramid.config import Configurator
 from pyramid.session import SignedCookieSessionFactory
-from db import MongoSessionFactory
-from model import ItemTranslationFinder
+from lib.db import MongoSessionFactory
+from lib.finders import ItemTranslationFinder
 
 __author__ = "Daniel Wykretowicz"
 
@@ -19,5 +19,5 @@ def main(global_config, **settings):
     config.add_request_method(
         item_translation_finder.request_property, 'db', reify=True)
     config.add_route('home', '/')
-    config.scan()
+    config.scan('title_asins.views')
     return config.make_wsgi_app()
