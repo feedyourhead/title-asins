@@ -35,9 +35,12 @@ class AsinView(BaseView):
     AMAZON_SITES = ('UK', 'DE', 'FR', 'IT', 'ES')
 
     @view_config(route_name='home',
-                 renderer='title_asins/templates/index.mak'
+                 renderer='title_asins:templates/index.mak'
                  )
     def find(self):
+        results = []
+        data = {'src_site': None,
+                'dst_site': None}
         if self.request.POST:
             if not self.form.validate():
                 raise exc.HTTPBadRequest
@@ -53,8 +56,8 @@ class AsinView(BaseView):
                     "Please do not enter more than  %s ASINs at a time"
                     % asins.ASIN_LIST_LIMIT)
                 raise exc.HTTPSeeOther('/')
-        results = self.request.db.find_by_asin_list_and_sites(
-            asin_list, data['src_site'], data['dst_site'])
+            results = self.request.db.find_by_asin_list_and_sites(
+                asin_list, data['src_site'], data['dst_site'])
 
         return {'form': FormRenderer(self.form),
                 'qresults': results,

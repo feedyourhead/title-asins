@@ -2,7 +2,7 @@
 
 
 class AsinController(object):
-    
+
     ASIN_LIST_LIMIT = 10
 
     def __init__(self, asins):

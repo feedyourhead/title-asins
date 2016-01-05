@@ -1,4 +1,3 @@
-# import pymongo
 from pymongo import MongoClient
 
 
@@ -9,8 +8,8 @@ class MongoSessionFactory(object):
 
     def create_session_callable(self):
         try:
-            session = MongoClient(self.mongo_uri)
-            # add actually a connection status
+            client = MongoClient(self.mongo_uri)
+            session = client['wi-amazon']
         except Exception as e:
             print "exception: ", type(e), e
-        return session['wi-amazon']
+        return session
