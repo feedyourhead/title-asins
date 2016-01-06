@@ -44,11 +44,13 @@
           </th>    
         </tr>
 
-        % for result in qresults:
+        % for result in qresults['translations']:
           <tr>
-            <td>${result['src_asin']}</td>
-            <td>${result['original']}</td>
-            <td>${result['translation']}</td>    
+            <td>
+            ${result['src_asin']}
+            </td>
+            <td>${result['attributes']['Title']['original']}</td>
+            <td>${result['attributes']['Title']['translation']}</td>    
           </tr>
         % endfor
       </tbody>

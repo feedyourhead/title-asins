@@ -22,7 +22,7 @@ class ItemTranslationFinder(BaseFinder):
             })
 
     def find_by_asin_list_and_sites(self, asin_list, src_site, dst_site):
-        results = []
+        results = {"translations": [], "errors": []}
         for asin in asin_list:
             try:
                 item_trans = self.find_one_by_asin_and_sites(
@@ -30,17 +30,11 @@ class ItemTranslationFinder(BaseFinder):
                     src_site,
                     dst_site
                 )
-                item_trans = {
-                    'src_asin': item_trans['src_asin'],
-                    'translation':
-                        item_trans['attributes']['Title']['translation'],
-                    'original': item_trans['attributes']['Title']['original']
-                }
-                results.append(item_trans)
-            except:
-                results.append(
-                    {'src_asin': asin,
-                     'translation': 'not found',
-                     'original': 'not found'
-                     })
+                if item_trans is not None:
+                    results["translations"].append(item_trans)
+                else:
+                    results["errors"].append("Asin "+asin+" not found")
+            except Exception as e:
+                print "Exception: ", type(e), e
+                results["errors"].append("Exception: "+" "+type(e)+" "+e)
         return results

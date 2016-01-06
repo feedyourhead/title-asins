@@ -2,7 +2,7 @@ from pyramid.view import view_config
 import pyramid.httpexceptions as exc
 from pyramid_simpleform import Form
 from pyramid_simpleform.renderers import FormRenderer
-from title_asins.lib.asin_preparator import AsinController
+from title_asins.lib.list_preparator import ListPreparator
 from title_asins.schemas.asin_form import AsinFormSchema
 
 
@@ -11,11 +11,6 @@ class BaseView(object):
     def __init__(self, request):
         self.request = request
         self.form = Form(self.request, schema=AsinFormSchema())
-
-    def _make_error(self, status_code, exception):
-        self.request.response.status_code = status_code
-        message = exception.args and exception.args[0]
-        return {'status': 'error', 'message': message}
 
     def _redirect(self, url):
         return exc.HTTPFound(url)
@@ -29,35 +24,42 @@ class BaseView(object):
     def _flash_msg(self, msg):
         return self.request.session.flash(msg)
 
+    def _bad_request(self):
+        return exc.HTTPBadRequest
+
 
 class AsinView(BaseView):
 
     AMAZON_SITES = ('UK', 'DE', 'FR', 'IT', 'ES')
+    LIST_LIMIT = 10
 
     @view_config(route_name='home',
                  renderer='title_asins:templates/index.mak'
                  )
     def find(self):
-        results = []
-        data = {'src_site': None,
-                'dst_site': None}
+        results = {"translations": [], "errors": []}
+        data = {'src_site': None, 'dst_site': None}
         if self.request.POST:
             if not self.form.validate():
-                raise exc.HTTPBadRequest
+                return self._bad_request()
             data = self.form.data
             if data['src_site'] == data['dst_site']:
-                self.request.session.flash(
+                self._flash_msg(
                     "Destination site has to be differnet than source site.")
-                raise exc.HTTPSeeOther('/')
-            asins = AsinController(data['src_asin'])
-            asin_list = asins.get_asins_from_request()
-            if not asins.validate_list_length():
-                self.request.session.flash(
+                return self._redirect('/')
+            # asins = ListPreparator(data['src_asin'])
+            asin_list = ListPreparator.convert_string_to_list(
+                data['src_asin'])
+            if not ListPreparator.validate_list_length(
+                    asin_list, self.LIST_LIMIT):
+                self._flash_msg(
                     "Please do not enter more than  %s ASINs at a time"
-                    % asins.ASIN_LIST_LIMIT)
-                raise exc.HTTPSeeOther('/')
+                    % self.LIST_LIMIT)
+                return self._redirect('/')
             results = self.request.db.find_by_asin_list_and_sites(
                 asin_list, data['src_site'], data['dst_site'])
+            for error in results["errors"]:
+                self._flash_msg(error)
 
         return {'form': FormRenderer(self.form),
                 'qresults': results,
