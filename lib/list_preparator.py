@@ -8,18 +8,18 @@ class ListPreparator(object):
     #     self.list = []
     @staticmethod
     def convert_string_to_list(string):
-        alist = []
+        a_list = []
         for line in string.splitlines():
-            for asin in line.split(','):
+            for item in line.split(','):
                 try:
-                    alist.append(str(asin.strip()))
+                    a_list.append(str(item.strip()))
                 except ValueError:
                     pass
-        return list(set(alist))
+        return list(set(a_list))
 
-    @staticmethod
-    def validate_list_length(alist, limit):
-        if len(alist) <= limit:
-            return True
-        else:
-            return False
+    # @staticmethod
+    # def validate_list_length(alist, limit):
+    #     if len(alist) <= limit:
+    #         return True
+    #     else:
+    #         return False

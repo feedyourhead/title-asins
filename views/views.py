@@ -41,21 +41,20 @@ class AsinView(BaseView):
         data = {'src_site': None, 'dst_site': None}
         if self.request.POST:
             if not self.form.validate():
-                return self._bad_request()
+                raise self._bad_request()
             data = self.form.data
-            if data['src_site'] == data['dst_site']:
-                self._flash_msg(
-                    "Destination site has to be differnet than source site.")
-                return self._redirect('/')
-            # asins = ListPreparator(data['src_asin'])
+            self.validate_sites(data['src_site'], data['dst_site'])
+
             asin_list = ListPreparator.convert_string_to_list(
                 data['src_asin'])
-            if not ListPreparator.validate_list_length(
-                    asin_list, self.LIST_LIMIT):
-                self._flash_msg(
-                    "Please do not enter more than  %s ASINs at a time"
-                    % self.LIST_LIMIT)
-                return self._redirect('/')
+
+            self.validate_list_length(asin_list, self.LIST_LIMIT)
+            # if not ListPreparator.validate_list_length(
+            #         asin_list, self.LIST_LIMIT):
+            #     self._flash_msg(
+            #         "Please do not enter more than  %s ASINs at a time"
+            #         % self.LIST_LIMIT)
+            #     raise self._redirect('/')
             results = self.request.db.find_by_asin_list_and_sites(
                 asin_list, data['src_site'], data['dst_site'])
             for error in results["errors"]:
@@ -67,3 +66,16 @@ class AsinView(BaseView):
                 'src_site': data['src_site'],
                 'dst_site': data['dst_site']
                 }
+
+    def validate_sites(self, src_site, dst_site):
+        if src_site == dst_site:
+            self._flash_msg(
+                "Destination site has to be differnet than source site.")
+            raise self._redirect('/')
+
+    def validate_list_length(self, asin_list, list_limit=10):
+        if len(asin_list) >= list_limit:
+            self._flash_msg(
+                "Please do not enter more than  %s ASINs at a time."
+                % list_limit)
+            raise self._redirect('/')
