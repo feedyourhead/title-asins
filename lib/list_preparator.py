@@ -3,9 +3,6 @@
 
 class ListPreparator(object):
 
-    # def __init__(self, asins):
-    #     self.string = asins
-    #     self.list = []
     @staticmethod
     def convert_string_to_list(string):
         a_list = []
@@ -16,10 +13,3 @@ class ListPreparator(object):
                 except ValueError:
                     pass
         return list(set(a_list))
-
-    # @staticmethod
-    # def validate_list_length(alist, limit):
-    #     if len(alist) <= limit:
-    #         return True
-    #     else:
-    #         return False
